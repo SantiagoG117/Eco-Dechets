@@ -10,7 +10,7 @@ function AppErrorMessage({error, isTouched} :any) {
     if( !isTouched || !error) return null;
     
     return (
-        <AppText color="danger" >{error}</AppText>
+        <AppText color="validation" >{error}</AppText>
     );
 }
 

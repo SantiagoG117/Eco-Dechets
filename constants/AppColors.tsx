@@ -1,10 +1,16 @@
 export default {
+    appPickerGray: '#f8f4f4' ,
     black: "#000",
+    validation: '#761010',
+    red: '#FF0000',
+    darkGray: '#0c0c0c' ,
     glassTransparency: '#00000033',
     gray: "#6e6969",
     gold: '#FFC300' ,
+    ligthGray: "#dbd9d9",
     primaryTransparency: "#415f2bce",
-    danger: '#761010',
+    primary: '#415f2b' ,
     secondaryTransparency: "#6BBA7380",
+    secondary: "#6BBA73",
     white: "#fff",
 } as const  // 'as const' ensures the type of each property is the exact string value (Prevents Element implicitly has an 'any' type error)

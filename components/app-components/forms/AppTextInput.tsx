@@ -5,15 +5,26 @@ import AppColors from '@/constants/AppColors';
 import { BlurView } from 'expo-blur';
 
 
-function AppTextInput({ ...textInputProps } :any) {
+function AppTextInput({color =  AppColors.white, backgroundColor = AppColors.glassTransparency, placeHolderColor =  AppColors.white, width = '100%', value ,...textInputProps } :any) {
     return (
-
-        
-        <BlurView intensity={80} style={styles.container}>
+        <BlurView 
+            intensity={80} 
+            style={[
+                styles.container,
+                {backgroundColor},
+                {width}
+            ]}
+        >
             <TextInput
-                placeholderTextColor={AppColors.white}
+                placeholderTextColor={placeHolderColor}
                 {...textInputProps} 
-                style={styles.textInput}
+                style={
+                    [
+                        styles.textInput, 
+                        {color}
+                    ]
+                }
+                value={value} //Set the value of the text input to the value of initial value
             />
         </BlurView>
     );
@@ -22,12 +33,12 @@ function AppTextInput({ ...textInputProps } :any) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: AppColors.glassTransparency,
+        //backgroundColor: AppColors.glassTransparency,
         borderRadius: 25,
         flexDirection: "row",
         marginVertical: 10, //Allows us to separate multiple text inputs on the same screen. 
         padding: 15,
-        width: '100%',
+        //width: '100%',
         overflow: 'hidden', // Required for borderRadius to apply correctly with BlurView
         borderWidth: 1.5,
         borderColor: 'rgba(255, 255, 255, 1)', 
@@ -38,7 +49,7 @@ const styles = StyleSheet.create({
             ios: 'San Francisco', // iOS-specific font
             android: 'Roboto'      // Android-specific font
         }),
-        color: AppColors.white,
+        //color: AppColors.white,
         fontSize: 18
     }
 })

@@ -9,6 +9,7 @@ import AppColors from '@/constants/AppColors';
 import * as Yup from 'yup'
 import AppText from '@/components/app-components/AppText';
 import AppPasswordField from '@/components/app-components/forms/AppPasswordField';
+import { router } from 'expo-router';
 
 
 
@@ -41,7 +42,8 @@ const handleSubmit = (values: {username: string; password:string}, navigation: a
     //TODO: Send credentials to API
 
     //Redirect to home
-    navigation.navigate('Home')
+    router.replace('/navigation/AppNavigator')
+    //navigation.navigate('Home')
 };
 
 function LoginScreen({navigation}: any) {

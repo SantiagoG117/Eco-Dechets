@@ -6,10 +6,11 @@ import AppErrorMessage from './AppErrorMessage';
 
 /* Defines the structure of our Form values. Necessary for TypeScript to infer the types correctly */
 interface InitialValues {
-    email: string;
+    amount: string;
     confirmPassword: string;
-    username: string;
+    email: string;
     password: string;
+    username: string;
   }
   
 /* Ensures that the initialValue prop is a key of InitialValues */
@@ -20,13 +21,14 @@ interface AppFormFieldProps {
 
 function AppFormField({initialValue, ...otherTextInputs}: AppFormFieldProps) {
 
-    const {setFieldTouched, handleChange, errors, touched} = useFormikContext<InitialValues>(); //InitialValues type allow typescript to infer the types for the errors and touched fields
+    const {setFieldTouched, handleChange, errors, touched, values} = useFormikContext<InitialValues>(); //InitialValues type allow typescript to infer the types for the errors and touched fields
 
     return (
         <>
             <AppTextInput
                 onBlur={() => setFieldTouched(initialValue)}
                 onChangeText={handleChange(initialValue)}
+                value={values[initialValue]} //Pass the value of the current initial value to AppText input
                 {...otherTextInputs}
             />
 
@@ -36,9 +38,5 @@ function AppFormField({initialValue, ...otherTextInputs}: AppFormFieldProps) {
     );
 }
 
-const styles = StyleSheet.create({
-    container : {
 
-    }
-})
 export default AppFormField;

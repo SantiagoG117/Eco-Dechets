@@ -1,20 +1,15 @@
-import { Image, StyleSheet, Platform } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import LoginScreen from './auth/LoginScreen';
-import WelcomeScreen from './auth/WelcomeScreen';
-import AppButton from '@/components/app-components/AppButton';
-import { Colors } from '@/constants/Colors';
+import React from 'react';
+import AppNavigator from './navigation/AppNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthNavigator from './navigation/AuthNavigator';
-import AppTextInput from '@/components/app-components/forms/AppTextInput';
+import TabLayout from './(tabs)/_layout';
+import AppPicker from '@/components/app-components/forms/AppPicker';
 
 export default function HomeScreen() {
   return (
-    <AuthNavigator></AuthNavigator>
+    <AuthNavigator/>
+    //<AppNavigator></AppNavigator>
   );
 }
 
