@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
             ios: 'San Francisco', // iOS-specific font
             android: 'Roboto'      // Android-specific font
         }),
-        //color: AppColors.white,
-        fontSize: 18
+        fontSize: 18,
+        fontWeight: 'bold'
     }
 })
 

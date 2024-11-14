@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppCategoryPickerItem from '@/components/app-components/forms/AppCategoryPickerItem';
 import AppForm from '@/components/app-components/forms/AppForm';
 import AppFormField from '@/components/app-components/forms/AppFormField';
@@ -11,12 +11,8 @@ import { View, StyleSheet, Text, Image } from 'react-native';
 
 import * as Yup from 'yup'
 import { Formik } from 'formik';
+import AppText from '@/components/app-components/AppText';
 
-/* 
-    TODO
-        ! Add title: Create new record
-        ! Clear values after submission (Hint: use context for this)
- */
 
 /* Dummy data for containers */
 
@@ -86,13 +82,15 @@ const measureUnits = [
 ];
 
 const validationSchema = Yup.object().shape({
-    amount: Yup.string().required().label('Amount'),
+    amount: Yup.string().optional().label('Amount'),
     containerSize: Yup.object().required().label('Container type'),
     measureUnits: Yup.object().required().label('Units of measure'),
     wasteType: Yup.object().required().label('Waste type')
 })
 
 function CreateWasteRecord({navigation} :any) {
+    
+    const [amountValidationVisible, setAmountValidationVisible] = useState(false)
 
     const handleSubmit = (
                             values: {amount: string; containerSize: string,  measureUnits: string, wasteType: string }, 
@@ -100,18 +98,15 @@ function CreateWasteRecord({navigation} :any) {
                             navigation: any
                         ) => {
 
+        if(values.amount === ""){
+            setAmountValidationVisible(true)
+            return;
+        }
         console.log('Values submitted: ', values);
-
-
-        //TODO: Send values to the api
-
+        setAmountValidationVisible(false)
         resetForm();
 
-        //navigation.navigate('Home');
-        
-    }
 
-    const afterSubmit = () => {
         navigation.navigate('Home');
     }
 
@@ -182,6 +177,10 @@ function CreateWasteRecord({navigation} :any) {
                                 placeHolderColor={AppColors.ligthGray}
                                 //width='75%'
                             />
+                            {/* Validation for amount */}
+                            {amountValidationVisible && <AppText color='validation'>Amount is a required field</AppText> }
+                            
+
 
                             <AppFormPicker 
                                 AppPickerItemComponent={AppPickerItem}

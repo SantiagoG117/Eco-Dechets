@@ -8,8 +8,8 @@ import AppPicker from '@/components/app-components/forms/AppPicker';
 
 export default function HomeScreen() {
   return (
-    <AuthNavigator/>
-    //<AppNavigator></AppNavigator>
+    //<AuthNavigator/>
+    <AppNavigator></AppNavigator>
   );
 }
 
