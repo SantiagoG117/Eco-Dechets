@@ -5,11 +5,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import AuthNavigator from './navigation/AuthNavigator';
 import TabLayout from './(tabs)/_layout';
 import AppPicker from '@/components/app-components/forms/AppPicker';
+import Categories from './categories';
+
 
 export default function HomeScreen() {
   return (
     //<AuthNavigator/>
     <AppNavigator></AppNavigator>
+    //<Categories></Categories>
   );
 }
 

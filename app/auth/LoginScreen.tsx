@@ -15,7 +15,13 @@ import { router } from 'expo-router';
 
 /* 
     TODO:
+        ! Change username for email:
+            ! Change initial value
+            ! Change placeholder
+            ! Modify validation for an email validation
         ! Change color and font for error messages
+
+        !Create 'Remember me' feature
 
 */
 
@@ -41,9 +47,9 @@ const handleSubmit = (values: {username: string; password:string}, navigation: a
 
     //TODO: Send credentials to API
 
+
     //Redirect to home
     router.replace('/navigation/AppNavigator')
-    //navigation.navigate('Home')
 };
 
 function LoginScreen({navigation}: any) {

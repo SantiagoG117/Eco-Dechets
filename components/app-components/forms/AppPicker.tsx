@@ -45,7 +45,7 @@ function AppPicker({ AppPickerItemComponent = AppPickerItem ,icon, items, number
                 />
                 <FlatList
                         data={items}
-                        keyExtractor={item => item.value.toString()}
+                        keyExtractor={item => item.id}
                         numColumns={numberOfColumns}
                         renderItem={({ item }) => 
                                     /* 
@@ -61,7 +61,7 @@ function AppPicker({ AppPickerItemComponent = AppPickerItem ,icon, items, number
                                             of the AppPickerItemComponent sent by the consumer of this component.
                                         */
                                         item={item}
-                                        label={item.label}
+                                        label={item.name}
                                         onPress={() => {
                                             /* Close the modal */
                                             setModalVisible(false);

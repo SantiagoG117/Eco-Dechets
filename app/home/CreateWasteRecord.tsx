@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppCategoryPickerItem from '@/components/app-components/forms/AppCategoryPickerItem';
 import AppForm from '@/components/app-components/forms/AppForm';
 import AppFormField from '@/components/app-components/forms/AppFormField';
@@ -10,11 +10,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { View, StyleSheet, Text, Image } from 'react-native';
 
 import * as Yup from 'yup'
-import { Formik } from 'formik';
 import AppText from '@/components/app-components/AppText';
+import APICategories from '../API/APICategories';
 
 
-/* Dummy data for containers */
 
 const containers = [
     {
@@ -43,33 +42,6 @@ const containers = [
     },
 ];
 
-const wasteItems = [
-    {
-        value: 1,
-        label: 'Air Conditioner',
-        backgroundColor: 'green',
-        icon: 'hvac'
-    },
-    {
-        value: 2,
-        label: 'Bike',
-        backgroundColor: 'green',
-        icon: 'pedal-bike'
-    },
-    {
-        value: 3,
-        label: "Garbage",
-        backgroundColor: 'green',
-        icon: 'delete'
-    },
-    {
-        value: 4,
-        label: "Recycling",
-        backgroundColor: 'green',
-        icon: 'recycling'
-    },
-];
-
 const measureUnits = [
     {
         value: 1,
@@ -89,9 +61,24 @@ const validationSchema = Yup.object().shape({
 })
 
 function CreateWasteRecord({navigation} :any) {
+    interface Category {
+        id: number;
+        name: string;
+        icon_name: string;
+    }
     
     const [amountValidationVisible, setAmountValidationVisible] = useState(false)
+    const [categories, setCategories] = useState<Category[]>([]);
 
+    useEffect(() => {
+        loadCategories()
+    }, []);
+
+    const loadCategories = async () => {
+        const response = await APICategories.getCategories();
+        setCategories(response.data as Category[])
+    }
+    
     const handleSubmit = (
                             values: {amount: string; containerSize: string,  measureUnits: string, wasteType: string }, 
                             resetForm: () => void ,
@@ -106,8 +93,9 @@ function CreateWasteRecord({navigation} :any) {
         setAmountValidationVisible(false)
         resetForm();
 
-
         navigation.navigate('Home');
+
+        //!Send values to the API datapoint
     }
 
     return (
@@ -160,7 +148,7 @@ function CreateWasteRecord({navigation} :any) {
                             {/* Waste Type */}
                             <AppFormPicker
                                 AppPickerItemComponent={AppCategoryPickerItem}
-                                items={wasteItems}
+                                items={categories}
                                 initialValue='wasteType'
                                 numberOfColumns={3}
                                 placeholder='Waste type'
