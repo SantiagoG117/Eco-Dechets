@@ -24,8 +24,6 @@ function AppText({children, style, color, ...otherProps} : any) {
 
 const styles = StyleSheet.create({
     text: {
-        //color: "tomato",
-        
         /* Returns a Plataform object that spread (...) style properties into the text object based on the current Plataform */
         ...Platform.select({
             ios: {

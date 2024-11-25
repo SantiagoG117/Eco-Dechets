@@ -10,7 +10,7 @@ function AppCategoryPickerItem({ item, onPress } : any) {
     return (
         <TouchableOpacity style={styles.container} onPress={onPress}>
             <AppIcon
-                backgroundColor={'green'}
+                backgroundColor={AppColors.primary}
                 name={item.icon_name}
                 size={80}
             />
@@ -21,15 +21,15 @@ function AppCategoryPickerItem({ item, onPress } : any) {
 
 const styles = StyleSheet.create({
     container:{
-        paddingHorizontal:20,
-        paddingVertical: 15,
+        paddingHorizontal:13,
+        paddingVertical: 10,
         alignItems:"center",
         width: '33%'
     },
     label: {
         marginTop: 5,
         textAlign: "center",
-        fontWeight:'100',
+        fontWeight:'bold',
         fontSize: 15
     }
 })

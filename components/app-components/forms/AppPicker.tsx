@@ -1,17 +1,24 @@
 import AppColors from '@/constants/AppColors';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback, Modal, Button, FlatList } from 'react-native';
+import { View, StyleSheet, TouchableWithoutFeedback, Modal, Button, FlatList, TouchableOpacity } from 'react-native';
 import AppText from '../AppText';
 import AppPickerItem from './AppPickerItem';
+import AppPickerWasteItem from './AppPickerWasteItem';
 
 function AppPicker({ AppPickerItemComponent = AppPickerItem ,icon, items, numberOfColumns = 1, placeholder ,selectedItem, onSelectItem, width='100%'}: any) {
 
-    //State for showing/hidding the modal
-    const [modalVisible, setModalVisible] = useState(false)
+    //State for showing/hidding the modalS
+    const [categoryModalVisible, setCategoryModalVisible] = useState(false);
+    const [wasteModalVisible, setWasteModalVisible] = useState(false);
+    //State for the selected category
+    const [selectedCategory, setSelectedCategory] = useState(null);
+
+
     return (
         <>
-            <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
+            {/* Input item for displaying the waste item */}
+            <TouchableWithoutFeedback onPress={() => setCategoryModalVisible(true)}>
                 <View style={[styles.container, {width}]}>
 
                     {icon && <MaterialCommunityIcons 
@@ -22,7 +29,7 @@ function AppPicker({ AppPickerItemComponent = AppPickerItem ,icon, items, number
                     />}
 
                     { selectedItem ? 
-                        (<AppText style={styles.text} color = 'darkGray'>{selectedItem.label}</AppText>) :
+                        (<AppText style={styles.text} color = 'darkGray'>{selectedItem.name}</AppText>) :
                         (<AppText style={styles.text} color = 'ligthGray'>{placeholder}</AppText>)
                     }
 
@@ -35,19 +42,26 @@ function AppPicker({ AppPickerItemComponent = AppPickerItem ,icon, items, number
                 </View>
             </TouchableWithoutFeedback>
             
+            {/* Category Modal */}
             <Modal
-                visible={modalVisible}
+                visible={categoryModalVisible}
                 animationType='slide'
             >
-                <Button
-                    title='Close'
-                    onPress={() => setModalVisible(false)}
-                />
-                <FlatList
-                        data={items}
-                        keyExtractor={item => item.id}
-                        numColumns={numberOfColumns}
-                        renderItem={({ item }) => 
+                <View style={styles.modalContainer}  >
+                <TouchableOpacity
+                    style={styles.customButton}
+                    onPress={() => setCategoryModalVisible(false)}
+                >
+                    <AppText style={styles.customButtonText} color='white'>Back to the form</AppText>
+                </TouchableOpacity>
+                    <View style={styles.modalTitleContainer}>
+                        <AppText style={styles.modalTitle}> Please select a category</AppText>
+                    </View>
+                        <FlatList
+                                data={items}
+                                keyExtractor={item => item.id}
+                                numColumns={numberOfColumns}
+                                renderItem={({ item }) => 
                                     /* 
                                         The consumer of the AppPicker component can specify the type of picker item to use
                                         by sending it as the component prop AppPickerItemComponent. 
@@ -63,20 +77,44 @@ function AppPicker({ AppPickerItemComponent = AppPickerItem ,icon, items, number
                                         item={item}
                                         label={item.name}
                                         onPress={() => {
-                                            /* Close the modal */
-                                            setModalVisible(false);
-                                            /* 
-                                                Event raised by the component when the user selects an item
-                                                
-                                                Set the selected item in the FlatList as the current item 
-                                                using useState. By doing so it displays the selected category
-                                            */
-                                            onSelectItem(item); 
+                                            //Set the item as the value for the selected category
+                                            setSelectedCategory(item);
+                                            //Show the waste modal
+                                            setWasteModalVisible(true)
+                                            
                                         }}
                                     />}
-                    >
+                        />
+                </View>
+            </Modal>
 
-                    </FlatList>
+            {/* WasteItem modal */}
+            <Modal visible={wasteModalVisible} animationType="slide">
+                <View style={styles.modalContainer}>
+                    <TouchableOpacity
+                        style={styles.customButton}
+                        onPress={() => setWasteModalVisible(false)}
+                    >
+                        <AppText style={styles.customButtonText} color="white">
+                            Back to categories
+                        </AppText>
+                    </TouchableOpacity>
+                    <View style={styles.modalTitleContainer}>
+                        <AppText style={styles.modalTitle}>
+                            Please select a waste item
+                        </AppText>
+                    </View>
+                    {/* Render AppPickerWasteItem */}
+                    <AppPickerWasteItem
+                        //Pass the selected category
+                        category={selectedCategory}
+                        onSelectItem={(item: any) => {
+                            onSelectItem(item); // ! Verify this is correct: Handle waste item selection
+                            setWasteModalVisible(false); 
+                            setCategoryModalVisible(false);
+                        }}
+                    />
+                </View>
             </Modal>
         </>
     );
@@ -84,21 +122,48 @@ function AppPicker({ AppPickerItemComponent = AppPickerItem ,icon, items, number
 
 const styles = StyleSheet.create({
     container: {
-        //width: '100%',
         flexDirection: 'row',
         backgroundColor: AppColors.appPickerGray,
         borderRadius: 25,
         padding: 15,
         marginVertical: 10 //Allows us to separate multiple text inputs on the same screen. 
     },
+    customButton: {
+        backgroundColor: AppColors.primary, 
+        paddingVertical: 15, 
+        paddingHorizontal: 30, 
+        borderRadius: 50, 
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 10, 
+    },
+    customButtonText: {
+        color: AppColors.white, 
+        fontWeight: 'bold',
+        fontSize: 20, 
+    },    
     icon:{
         marginRight: 5,
         position:"relative",
         top: 1
     },
+    modalContainer: {
+        flex: 1, 
+        backgroundColor: AppColors.modalBackgroundColor, 
+        padding: 10,
+    },    
+    modalTitle: {
+        fontWeight: 'bold',
+        padding: 5
+    },
+    modalTitleContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 3
+    },
     text: {
         flex: 1, //By taking all the available space we are sending the chevron to the right
         fontWeight: 'bold'
     },
-})
+}) 
 export default AppPicker;

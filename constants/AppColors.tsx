@@ -8,6 +8,7 @@ export default {
     gray: "#6e6969",
     gold: '#FFC300' ,
     ligthGray: "#dbd9d9",
+    modalBackgroundColor: "#edecec" ,
     primaryTransparency: "#415f2bce",
     primary: '#415f2b' ,
     secondaryTransparency: "#6BBA7380",

@@ -13,6 +13,11 @@ import * as Yup from 'yup'
 import AppText from '@/components/app-components/AppText';
 import APICategories from '../API/APICategories';
 
+/* 
+    TODO
+        ! Create a nested AppPicker component to navigate to all the wasteitems
+        ! Set the units of measure type according to the category id of each waste item
+*/
 
 
 const containers = [
@@ -55,12 +60,11 @@ const measureUnits = [
 
 const validationSchema = Yup.object().shape({
     amount: Yup.string().optional().label('Amount'),
-    containerSize: Yup.object().required().label('Container type'),
-    measureUnits: Yup.object().required().label('Units of measure'),
-    wasteType: Yup.object().required().label('Waste type')
+    wasteItem: Yup.object().required().label('Waste item')
 })
 
 function CreateWasteRecord({navigation} :any) {
+    
     interface Category {
         id: number;
         name: string;
@@ -80,7 +84,7 @@ function CreateWasteRecord({navigation} :any) {
     }
     
     const handleSubmit = (
-                            values: {amount: string; containerSize: string,  measureUnits: string, wasteType: string }, 
+                            values: {amount: string, wasteType: string }, 
                             resetForm: () => void ,
                             navigation: any
                         ) => {
@@ -97,6 +101,7 @@ function CreateWasteRecord({navigation} :any) {
 
         //!Send values to the API datapoint
     }
+
 
     return (
         <View style={styles.container}>
@@ -127,29 +132,18 @@ function CreateWasteRecord({navigation} :any) {
                             initialValues= {{
                                 //Eventhough amount is a number value, it is represented as a string in the form
                                 amount: '',
-                                containerSize: null,
-                                measureUnits: null,
-                                wasteType: null,
+                                wasteItem: null,
                             }}
                             validationSchema={validationSchema}
                             onSubmit={(values: any, {resetForm}: any) => (handleSubmit(values, resetForm ,navigation))}
                         >
     
-                            {/* Container Size */}
-                            <AppFormPicker
-                                AppPickerItemComponent={AppCategoryPickerItem}
-                                items={containers}
-                                initialValue='containerSize'
-                                numberOfColumns={3}
-                                placeholder='Container type'
-                                width='100%'
-                            />
                             
-                            {/* Waste Type */}
+                            {/* Waste item */}
                             <AppFormPicker
                                 AppPickerItemComponent={AppCategoryPickerItem}
                                 items={categories}
-                                initialValue='wasteType'
+                                initialValue='wasteItem'
                                 numberOfColumns={3}
                                 placeholder='Waste type'
                                 width='100%'
@@ -168,16 +162,6 @@ function CreateWasteRecord({navigation} :any) {
                             {/* Validation for amount */}
                             {amountValidationVisible && <AppText color='validation'>Amount is a required field</AppText> }
                             
-
-
-                            <AppFormPicker 
-                                AppPickerItemComponent={AppPickerItem}
-                                items={measureUnits}
-                                initialValue='measureUnits'
-                                numberOfColumns={2}
-                                placeholder='Units of measure'
-                                //width='55%'
-                            />
                             
                             {/* Submit buttons */}
                             <View style={styles.buttonsContainer}>
