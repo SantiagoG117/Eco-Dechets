@@ -3,7 +3,6 @@ import AppCategoryPickerItem from '@/components/app-components/forms/AppCategory
 import AppForm from '@/components/app-components/forms/AppForm';
 import AppFormField from '@/components/app-components/forms/AppFormField';
 import AppFormPicker from '@/components/app-components/forms/AppFormPicker';
-import AppPickerItem from '@/components/app-components/forms/AppPickerItem';
 import AppSubmitButton from '@/components/app-components/forms/AppSubmitButton';
 import AppColors from '@/constants/AppColors';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -12,11 +11,13 @@ import { View, StyleSheet, Text, Image } from 'react-native';
 import * as Yup from 'yup'
 import AppText from '@/components/app-components/AppText';
 import APICategories from '../API/APICategories';
+import APIWasteRecords from '../API/APIWasteRecords';
 
 /* 
     TODO
-        ! Create a nested AppPicker component to navigate to all the wasteitems
+
         ! Set the units of measure type according to the category id of each waste item
+        ! POST the data to the database
 */
 
 
@@ -47,16 +48,6 @@ const containers = [
     },
 ];
 
-const measureUnits = [
-    {
-        value: 1,
-        label: 'Kilograms',
-    },
-    {
-        value: 2,
-        label: 'Unit(s)',
-    },
-];
 
 const validationSchema = Yup.object().shape({
     amount: Yup.string().optional().label('Amount'),
@@ -83,23 +74,33 @@ function CreateWasteRecord({navigation} :any) {
         setCategories(response.data as Category[])
     }
     
-    const handleSubmit = (
-                            values: {amount: string, wasteType: string }, 
-                            resetForm: () => void ,
-                            navigation: any
-                        ) => {
+    const handleSubmit = async ( values: {amount: string, wasteItem: any }, resetForm: () => void , navigation: any) => {
 
         if(values.amount === ""){
             setAmountValidationVisible(true)
             return;
         }
-        console.log('Values submitted: ', values);
-        setAmountValidationVisible(false)
-        resetForm();
 
-        navigation.navigate('Home');
+        const username = 'SantiagoGP117'
 
         //!Send values to the API datapoint
+        const result = await APIWasteRecords.CreateWasteRecord(
+            username,
+            values.wasteItem.id,
+            values.amount,
+            values.wasteItem.category_id
+        );
+
+        if(!result.ok)
+            return console.log('Could not save the listing. ', result.problem)
+
+        console.log('Values posted: ', result.data);
+
+
+        setAmountValidationVisible(false)
+        resetForm();
+        navigation.navigate('Home');
+
     }
 
 
