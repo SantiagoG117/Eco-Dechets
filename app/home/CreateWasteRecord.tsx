@@ -12,13 +12,9 @@ import * as Yup from 'yup'
 import AppText from '@/components/app-components/AppText';
 import APICategories from '../API/APICategories';
 import APIWasteRecords from '../API/APIWasteRecords';
-
-/* 
-    TODO
-
-        ! Set the units of measure type according to the category id of each waste item
-        ! POST the data to the database
-*/
+import AppTextInput from '@/components/app-components/forms/AppTextInput';
+import { useFormikContext } from 'formik';
+import AppDynamicUnits from '@/components/app-components/forms/AppDynamicUnits';
 
 
 const containers = [
@@ -55,15 +51,16 @@ const validationSchema = Yup.object().shape({
 })
 
 function CreateWasteRecord({navigation} :any) {
-    
+
     interface Category {
         id: number;
         name: string;
         icon_name: string;
     }
     
-    const [amountValidationVisible, setAmountValidationVisible] = useState(false)
+    const [amountValidationVisible, setAmountValidationVisible] = useState(false);
     const [categories, setCategories] = useState<Category[]>([]);
+
 
     useEffect(() => {
         loadCategories()
@@ -81,9 +78,9 @@ function CreateWasteRecord({navigation} :any) {
             return;
         }
 
-        const username = 'SantiagoGP117'
+        const username = 'SantiagoGP117' //TODO Change this value for the current user name
 
-        //!Send values to the API datapoint
+        //Send values to the API datapoint
         const result = await APIWasteRecords.CreateWasteRecord(
             username,
             values.wasteItem.id,
@@ -94,8 +91,6 @@ function CreateWasteRecord({navigation} :any) {
         if(!result.ok)
             return console.log('Could not save the listing. ', result.problem)
 
-        console.log('Values posted: ', result.data);
-
 
         setAmountValidationVisible(false)
         resetForm();
@@ -103,6 +98,7 @@ function CreateWasteRecord({navigation} :any) {
 
     }
 
+    
 
     return (
         <View style={styles.container}>
@@ -138,8 +134,7 @@ function CreateWasteRecord({navigation} :any) {
                             validationSchema={validationSchema}
                             onSubmit={(values: any, {resetForm}: any) => (handleSubmit(values, resetForm ,navigation))}
                         >
-    
-                            
+
                             {/* Waste item */}
                             <AppFormPicker
                                 AppPickerItemComponent={AppCategoryPickerItem}
@@ -150,20 +145,30 @@ function CreateWasteRecord({navigation} :any) {
                                 width='100%'
                             />
 
-                            {/* Amount*/}
-                            <AppFormField
-                                color={AppColors.black}
-                                backgroundColor={AppColors.appPickerGray}
-                                initialValue='amount'
-                                keyboardType='numeric'
-                                placeholder='Amount'
-                                placeHolderColor={AppColors.ligthGray}
-                                //width='75%'
-                            />
-                            {/* Validation for amount */}
-                            {amountValidationVisible && <AppText color='validation'>Amount is a required field</AppText> }
-                            
-                            
+                            {/* Amount View */}
+                            <View style={styles.amountContainer}>
+                                <View style={styles.metricsContainer} >
+                                    {/* Amount*/}
+                                    <AppFormField
+                                        color={AppColors.black}
+                                        backgroundColor={AppColors.appPickerGray}
+                                        initialValue='amount'
+                                        keyboardType='numeric'
+                                        placeholder='Amount'
+                                        placeHolderColor={AppColors.ligthGray}
+                                        width='60%'
+                                    />
+
+                                    {/* Units of measure*/}
+                                    <AppDynamicUnits />
+                                </View>
+                                <View style={styles.validationContainer}>
+                                    {/* Validation for amount */}
+                                    {amountValidationVisible && <AppText color='validation'>Amount is a required field</AppText> }
+                                </View>
+                            </View>
+
+                                                        
                             {/* Submit buttons */}
                             <View style={styles.buttonsContainer}>
                                 <AppSubmitButton 
@@ -183,7 +188,7 @@ function CreateWasteRecord({navigation} :any) {
 
 const styles = StyleSheet.create({
     amountContainer: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         marginBottom: 20
     },
     buttonsContainer: {
@@ -223,6 +228,9 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         backgroundColor: AppColors.white
     },
+    metricsContainer: {
+        flexDirection: 'row'
+    },
     title: {
         justifyContent: 'center'
     }
@@ -232,6 +240,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontStyle: 'italic',
         paddingTop: 6
+    },
+    validationContainer: {
+        
     }
 })
 export default CreateWasteRecord;

@@ -4,7 +4,7 @@ import { create } from 'apisauce';
 
 /* Access to the API */
 const apiClient = create({
-    baseURL: "http://10.70.242.223:8080"
+    baseURL: "http://10.70.249.66:8080"
 });
 
 export default apiClient;
